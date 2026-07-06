@@ -1,5 +1,7 @@
-media: "."
-
+media:
+  input: ""
+  output: "/"
+  
 content:
   - name: data
     label: Site Verileri (Etkinlik, Galeri, Arşiv)
