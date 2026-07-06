@@ -97,11 +97,41 @@
         .event-box h3 { font-family: 'Playfair Display'; font-size: 1.6rem; margin: 0 0 10px 0; color: #fff; }
         .event-box p { margin: 0; color: var(--accent-color); font-size: 0.9rem; letter-spacing: 0.1rem; }
 
-        /* Arşiv */
+        /* --- YENİ ARŞİV TASARIMI (YATAY KAYDIRMA) --- */
         #arsiv { margin: 15vh auto 10vh auto; width: 90%; max-width: 80vw; z-index: 12; }
-        .archive-container { display: flex; justify-content: center; gap: 40px; flex-wrap: wrap; position: relative; z-index: 2; }
-        .archive-item { width: 320px; cursor: pointer; position: relative; border-radius: 4px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.6); }
-        .archive-item img { width: 100%; height: 220px; object-fit: cover; display: block; }
+        
+        .scroll-hint { text-align: center; color: var(--accent-color); font-size: 0.75rem; letter-spacing: 0.2rem; margin-top: -30px; margin-bottom: 30px; text-transform: uppercase; animation: pulse 2s infinite; opacity: 0.6; pointer-events: none; }
+        @keyframes pulse { 0% { opacity: 0.3; } 50% { opacity: 0.8; } 100% { opacity: 0.3; } }
+
+        .archive-container { 
+            display: flex; 
+            gap: 30px; 
+            overflow-x: auto; 
+            overflow-y: hidden;
+            padding-bottom: 20px; 
+            cursor: grab; 
+            scroll-behavior: smooth;
+            -webkit-overflow-scrolling: touch; 
+            position: relative; 
+            z-index: 2; 
+        }
+        
+        /* Kaydırma Çubuğunu Gizle */
+        .archive-container::-webkit-scrollbar { display: none; }
+        .archive-container { -ms-overflow-style: none; scrollbar-width: none; }
+        .archive-container.active { cursor: grabbing; }
+
+        .archive-item { 
+            flex: 0 0 320px; 
+            cursor: pointer; 
+            position: relative; 
+            border-radius: 4px; 
+            overflow: hidden; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.6); 
+            user-select: none; 
+        }
+        
+        .archive-item img { width: 100%; height: 220px; object-fit: cover; display: block; pointer-events: none; } 
         .overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); display: flex; justify-content: center; align-items: center; opacity: 0; transition: 0.4s; pointer-events: none; }
         .archive-item:hover .overlay { opacity: 1; }
         .overlay h3 { font-size: 1.1rem; color: #fff; text-transform: uppercase; letter-spacing: 0.15rem; font-family: 'Montserrat'; padding: 0 20px; text-align: center; }
@@ -130,7 +160,9 @@
             #etkinlikler h2 { text-align: center; }
             .event-box { text-align: center; }
             .slider-container { height: 40vh; position: relative; width: 100%; }
-            .archive-item { width: 100%; max-width: 350px; }
+            
+            /* Mobilde Kutuların Genişliğini Yatay Kaydırma İçin Ayarlama */
+            .archive-item { flex: 0 0 280px; max-width: 100%; }
             
             .nav-strip { position: absolute; top: 0; height: 100%; width: 50px; background: rgba(0,0,0,0.3); border: none; z-index: 20;}
             .nav-strip:first-child { left: 0; }
@@ -184,7 +216,7 @@
         <div class="slider-container" id="mainSliderContainer">
             <div class="nav-strip" onclick="changeSlide(-1)">&#10094;</div>
             <div style="flex-grow: 1; overflow: hidden; position: relative;">
-                <img id="mainGalleryImg" src="gosterimdekiler1.png" class="main-gallery-img" onclick="openModalFromTop()">
+                <img id="mainGalleryImg" src="" class="main-gallery-img" onclick="openModalFromTop()">
                 <div id="sliderDots" class="dots-container"></div>
             </div>
             <div class="nav-strip" onclick="changeSlide(1)">&#10095;</div>
@@ -198,6 +230,7 @@
 
     <section id="arsiv" class="section-frame">
         <h2>Arşiv</h2>
+        <div class="scroll-hint">← Sürükleyerek Kaydırın →</div>
         <div class="archive-container" id="arsivContainer"></div>
     </section>
 
@@ -266,21 +299,17 @@
         let currentModalMode = 'slider'; 
         let currentActiveArray = [];
 
-        // Yardımcı fonksiyon: CMS'ten gelen yollardaki "/" hatasını temizler
         const cleanImg = (imgStr) => {
             if (!imgStr) return '';
             return imgStr.startsWith('/') ? imgStr.substring(1) : imgStr;
         };
 
-        // CACHE BUSTER: Browser belleğinde kalan eski veriyi engellemek için zaman damgası ekliyoruz
         fetch('data.json?v=' + new Date().getTime())
             .then(response => response.json())
             .then(data => {
-                // 1. Slider Verileri
                 sliderImages = data.slider ? data.slider.map(item => cleanImg(item.image)).filter(Boolean) : [];
                 currentActiveArray = sliderImages;
                 
-                // 2. Etkinlikler Verileri
                 const etkinliklerContainer = document.getElementById('etkinliklerContainer');
                 if(data.etkinlikler && data.etkinlikler.length > 0) {
                     etkinliklerContainer.innerHTML = data.etkinlikler.map(etk => `
@@ -293,7 +322,6 @@
                     etkinliklerContainer.innerHTML = '<p style="color: var(--accent-color);">Yaklaşan etkinlik bulunmamaktadır.</p>';
                 }
 
-                // 3. Arşiv Verileri
                 const arsivContainer = document.getElementById('arsivContainer');
                 archiveCollections = {}; 
                 
@@ -301,7 +329,7 @@
                     arsivContainer.innerHTML = data.arsiv.map(arsivItem => {
                         const coverImg = cleanImg(arsivItem.coverImage);
                         
-                        archiveCollections[arsivItem.id] = arsivItem.images 
+                        archiveCollections[arsivItem.id] = (arsivItem.images && Array.isArray(arsivItem.images)) 
                             ? arsivItem.images.map(img => cleanImg(img.image)).filter(Boolean) 
                             : [];
                         
@@ -313,7 +341,6 @@
                         `;
                     }).join('');
                 }
-
                 initGallery();
             })
             .catch(error => {
@@ -509,6 +536,52 @@
                 }
             }, {passive: true});
         }
+
+        // --- YENİ: ARŞİV MASAÜSTÜ MOUSE SÜRÜKLEME (DRAG) FONKSİYONU ---
+        const arsivSlider = document.getElementById('arsivContainer');
+        let isDown = false;
+        let isDragging = false;
+        let startX;
+        let scrollLeft;
+
+        arsivSlider.addEventListener('mousedown', (e) => {
+            isDown = true;
+            isDragging = false;
+            arsivSlider.classList.add('active');
+            startX = e.pageX - arsivSlider.offsetLeft;
+            scrollLeft = arsivSlider.scrollLeft;
+        });
+
+        arsivSlider.addEventListener('mouseleave', () => {
+            isDown = false;
+            arsivSlider.classList.remove('active');
+        });
+
+        arsivSlider.addEventListener('mouseup', () => {
+            isDown = false;
+            arsivSlider.classList.remove('active');
+        });
+
+        arsivSlider.addEventListener('mousemove', (e) => {
+            if (!isDown) return;
+            e.preventDefault();
+            const x = e.pageX - arsivSlider.offsetLeft;
+            const walk = (x - startX) * 2; // Kaydırma hızını ayarlayan çarpan
+            
+            // Eğer fare 5 pikselden fazla hareket ettiyse sürükleme sayılır (tıklamayı engellemek için)
+            if (Math.abs(walk) > 5) {
+                isDragging = true;
+            }
+            arsivSlider.scrollLeft = scrollLeft - walk;
+        });
+
+        // Sürükleme sırasında karta yanlışlıkla tıklanmasını engeller
+        arsivSlider.addEventListener('click', (e) => {
+            if (isDragging) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+        }, true);
     </script>
 </body>
 </html>
