@@ -16,10 +16,14 @@
             --accent-color: #a8947e;
         }
 
-        html { scroll-behavior: smooth; }
+        html { 
+            scroll-behavior: smooth; 
+            overflow-x: hidden; /* Prevents whole-page sideways scrolling */
+            max-width: 100vw;
+        }
         
         * {
-            box-sizing: border-box; /* Bu satır ekranın dışa taşmasını engeller */
+            box-sizing: border-box; 
         }
         
         body { 
@@ -27,8 +31,10 @@
             color: var(--text-color); 
             font-family: 'Montserrat', sans-serif; 
             margin: 0; 
+            padding: 0;
             line-height: 1.8; 
             overflow-x: hidden;
+            max-width: 100vw;
         }
 
         /* Arka Plan Logo */
@@ -52,7 +58,13 @@
             object-fit: contain; 
             transition: opacity 0.25s ease, transform 0.25s ease; 
         }
-        .main-gallery-img { width: 100%; height: 100%; object-fit: cover; cursor: zoom-in; }
+        .main-gallery-img { 
+            width: 100%; 
+            height: 100%; 
+            object-fit: cover; 
+            cursor: zoom-in; 
+            touch-action: pan-y; /* CRITICAL MOBILE FIX: Stops horizontal page scroll when swiping images */
+        }
 
         .close-btn { position: absolute; top: 20px; right: 40px; color: white; font-size: 40px; cursor: pointer; z-index: 3001; }
         
@@ -152,31 +164,32 @@
         footer { padding: 80px 20px; color: #777; background: #050505; text-align: center; border-top: 1px solid #111; }
         .address { color: var(--accent-color); font-weight: bold; font-size: 1.1rem; margin-top: 10px; }
         
-        /* MOBİL UYUMLULUK DÜZELTİLDİ VE TELEFONLARA ÖZEL AYARLANDI */
+        /* MOBİL UYUMLULUK */
         @media (max-width: 1024px) {
-            nav { position: relative; flex-direction: column; padding: 25px 20px; gap: 20px; background: rgba(0,0,0,0.8); }
+            nav { position: relative; flex-direction: column; padding: 25px 20px; gap: 20px; background: rgba(0,0,0,0.8); width: 100%; }
             .nav-links { display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; }
             .nav-links a { margin-left: 0; font-size: 0.75rem; }
             
-            .hero-banner { height: 40vh; } 
+            .hero-banner { height: 40vh; width: 100%; } 
             
-            /* Bölümler mobilde ortalandı ve taşkınlıklar giderildi */
+            /* Merkezleme ve Genişlik Ayarları */
             #gosterimdekiler, #etkinlikler, #arsiv {
                 max-width: 100%;
-                width: 92%;
+                width: 90%;
                 margin: 40px auto;
+                box-sizing: border-box;
             }
             
-            .section-frame { padding: 40px 20px; box-shadow: inset 0 0 0 4px var(--frame-bg), inset 0 0 0 5px #333; }
+            .section-frame { padding: 40px 15px; box-shadow: inset 0 0 0 4px var(--frame-bg), inset 0 0 0 5px #333; }
             .section-frame::after { display: none; } 
             
             #etkinlikler h2 { text-align: center; }
             .event-box { text-align: center; }
 
-            .slider-container { height: 40vh; position: relative; }
+            .slider-container { height: 40vh; position: relative; width: 100%; }
             .archive-item { width: 100%; max-width: 350px; }
             
-            /* Oklar mobilde resmin üzerine alındı (Yer tasarrufu) */
+            /* Oklar mobilde resmin üzerine alındı */
             .nav-strip { position: absolute; top: 0; height: 100%; width: 50px; background: rgba(0,0,0,0.3); border: none; z-index: 20;}
             .nav-strip:first-child { left: 0; }
             .nav-strip:last-child { right: 0; }
@@ -184,7 +197,7 @@
             .modal-frame { width: 100%; height: 65vh; border: none; }
             .close-btn { top: 15px; right: 25px; font-size: 35px; }
             
-            .form-container { padding: 30px 20px; width: 100%; }
+            .form-container { padding: 30px 20px; width: 100%; box-sizing: border-box; }
         }
     </style>
 </head>
@@ -195,14 +208,13 @@
         <span class="toast-close" onclick="closeToast()">&times;</span>
     </div>
 
-    <!-- Modal (Lightbox) -->
     <div id="imageModal" class="modal">
         <span class="close-btn" onclick="closeModal()">&times;</span>
         <div class="modal-content">
             <div class="modal-frame" id="modalFrameContainer">
                 <div class="nav-strip" id="modalPrevBtn" onclick="changeModal(-1)">&#10094;</div>
                 <div class="modal-img-container">
-                    <img id="modalImg" class="modal-img" src="" alt="Galeri">
+                    <img id="modalImg" class="modal-img" src="" alt="Galeri" style="touch-action: pan-y;">
                 </div>
                 <div class="nav-strip" id="modalNextBtn" onclick="changeModal(1)">&#10095;</div>
             </div>
@@ -227,7 +239,7 @@
         <div class="slider-container" id="mainSliderContainer">
             <div class="nav-strip" onclick="changeSlide(-1)">&#10094;</div>
             <div style="flex-grow: 1; overflow: hidden; position: relative;">
-                <img id="mainGalleryImg" src="gosterimdekiler1.png" class="main-gallery-img" onclick="openModalFromTop()">
+                <img id="mainGalleryImg" src="gösterimdekiler1.png" class="main-gallery-img" onclick="openModalFromTop()">
                 <div id="sliderDots" class="dots-container"></div>
             </div>
             <div class="nav-strip" onclick="changeSlide(1)">&#10095;</div>
@@ -286,7 +298,6 @@
     </footer>
 
     <script>
-        // --- NETLIFY IDENTITY YAKALAYICI ---
         if (window.netlifyIdentity) {
             window.netlifyIdentity.on("init", user => {
                 if (!user && window.location.hash.includes("recovery_token")) {
@@ -295,7 +306,6 @@
             });
         }
 
-        // --- FORM GÖNDERİM ---
         document.getElementById("etkinlikForm").addEventListener("submit", function(event) {
             event.preventDefault(); 
             const form = event.target;
@@ -327,7 +337,6 @@
             setTimeout(() => toast.style.display = "none", 400);
         }
 
-        // --- SCROLL ANİMASYONU ---
         const observerOptions = { threshold: 0.05, rootMargin: "0px" };
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
@@ -339,8 +348,8 @@
         }, observerOptions);
         document.querySelectorAll('.section-frame').forEach(frame => observer.observe(frame));
 
-        // --- DİNAMİK RESİM DİZİLERİ ---
-        const sliderImages = ["gosterimdekiler1.png", "gosterimdekiler2.png", "gosterimdekiler3.png"]; 
+        // --- RESİM DİZİLERİ ---
+        const sliderImages = ["gösterimdekiler1.png", "gösterimdekiler2.png", "gösterimdekiler3.png"]; 
         
         const archiveCollections = {
             'senfoni': ["senfoni.jpg", "senfoni2.jpg"],
@@ -353,7 +362,6 @@
         let currentModalMode = 'slider'; 
         let currentActiveArray = sliderImages;
 
-        // Başlangıç Ayarları
         document.addEventListener('DOMContentLoaded', () => {
             const dotsContainer = document.getElementById("sliderDots");
             
@@ -366,7 +374,7 @@
             
             updateDotsVisuals();
             startInterval();
-            setupTouchEvents(); // Mobilde kaydırma eventlerini aktifleştir
+            setupTouchEvents(); 
         });
 
         function updateDotsVisuals() {
@@ -381,19 +389,16 @@
             if(modalDots[currentImgIndex]) modalDots[currentImgIndex].classList.add("active");
         }
 
-        // --- YUMUŞAK GEÇİŞ (SMOOTH TRANSITION) UYGULAMALARI ---
         function transitionImage(imgElement, newSrc, isModal = false) {
-            // Sönme ve küçülme efekti
             imgElement.style.opacity = '0';
             imgElement.style.transform = 'scale(0.95)';
             
             setTimeout(() => {
                 imgElement.src = newSrc;
-                // Geri gelme ve büyüme efekti
                 imgElement.style.opacity = '1';
                 imgElement.style.transform = 'scale(1)';
                 updateDotsVisuals();
-            }, 250); // 0.25 saniye bekler (CSS transition süresi ile uyumlu)
+            }, 250); 
         }
 
         function goToSlide(newIndex) {
@@ -455,7 +460,6 @@
             const modalImg = document.getElementById("modalImg");
             
             modalImg.src = currentActiveArray[currentImgIndex];
-            // Modalı açarken geçişin temiz olması için:
             modalImg.style.opacity = '1';
             modalImg.style.transform = 'scale(1)';
             
@@ -463,7 +467,6 @@
             modal.style.display = "block";
             clearInterval(slideInterval); 
             
-            // Eğer galeride 1 resim varsa sağ/sol oklarını gizle
             if(currentActiveArray.length <= 1) {
                 navLeft.style.display = 'none';
                 navRight.style.display = 'none';
@@ -504,25 +507,22 @@
             const sliderArea = document.getElementById('mainSliderContainer');
             const modalArea = document.getElementById('modalFrameContainer');
 
-            // Ana Sayfa Slider Swipe
             sliderArea.addEventListener('touchstart', e => {
                 touchstartX = e.changedTouches[0].screenX;
             }, {passive: true});
 
             sliderArea.addEventListener('touchend', e => {
                 touchendX = e.changedTouches[0].screenX;
-                if (touchendX < touchstartX - 50) changeSlide(1); // Sola kaydırma (İleri)
-                if (touchendX > touchstartX + 50) changeSlide(-1); // Sağa kaydırma (Geri)
+                if (touchendX < touchstartX - 50) changeSlide(1); 
+                if (touchendX > touchstartX + 50) changeSlide(-1); 
             }, {passive: true});
 
-            // Modal İçi Swipe
             modalArea.addEventListener('touchstart', e => {
                 touchstartX = e.changedTouches[0].screenX;
             }, {passive: true});
 
             modalArea.addEventListener('touchend', e => {
                 touchendX = e.changedTouches[0].screenX;
-                // Sadece 1'den fazla resim varsa kaydırmaya izin ver
                 if (currentActiveArray.length > 1) {
                     if (touchendX < touchstartX - 50) changeModal(1);
                     if (touchendX > touchstartX + 50) changeModal(-1);
