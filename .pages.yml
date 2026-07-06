@@ -1,12 +1,10 @@
-media:
-  input: ""
-  output: ""
+media: "."
 
 content:
   - name: galeri
     label: Galeri ve Arşiv Yönetimi
     type: file
-    file: data.json
+    path: data.json
     fields:
       - name: slider
         label: Gösterimdekiler (Ana Slider)
