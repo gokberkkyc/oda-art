@@ -1,18 +1,18 @@
 {
   "slider": [
     {
-      "image": "/gosterimdekiler1.png"
+      "image": "gosterimdekiler1.png"
     },
     {
-      "image": "/gosterimdekiler2.png"
+      "image": "gosterimdekiler2.png"
     },
     {
-      "image": "/gosterimdekiler3.png"
+      "image": "gosterimdekiler3.png"
     }
   ],
   "etkinlikler": [
     {
-      "title": "Yönetmen Söyleşisi: 9. Senfoni",
+      "title": "Sanatçı Söyleşisi: \"Işık ve Boşluk\"",
       "date": "15 Temmuz 2026 | 19:00"
     },
     {
@@ -24,49 +24,31 @@
     {
       "id": "senfoni",
       "title": "9. Senfoni - Kısa Film",
-      "coverImage": "/senfoni.jpg",
+      "coverImage": "senfoni.jpg",
       "images": [
-        {
-          "image": "/senfoni.jpg"
-        },
-        {
-          "image": "/senfoni2.jpg"
-        }
+        { "image": "senfoni.jpg" },
+        { "image": "senfoni2.jpg" }
       ]
     },
     {
       "id": "esogu",
       "title": "ESOGÜ Endüstriyel Tasarım Sergisi",
-      "coverImage": "/senfoni2.jpg",
+      "coverImage": "senfoni2.jpg",
       "images": [
-        {
-          "image": "/senfoni.jpg"
-        },
-        {
-          "image": "/senfoni2.jpg"
-        },
-        {
-          "image": "/adsız.png"
-        }
+        { "image": "senfoni.jpg" },
+        { "image": "senfoni2.jpg" },
+        { "image": "adsız.png" }
       ]
     },
     {
       "id": "poeta",
       "title": "POETA Atölyesi",
-      "coverImage": "/senfoni.jpg",
+      "coverImage": "senfoni.jpg",
       "images": [
-        {
-          "image": "/senfoni.jpg"
-        },
-        {
-          "image": "/senfoni2.jpg"
-        },
-        {
-          "image": "/adsız.png"
-        },
-        {
-          "image": "/adsız.png"
-        }
+        { "image": "senfoni.jpg" },
+        { "image": "senfoni2.jpg" },
+        { "image": "adsız.png" },
+        { "image": "adsız.png" }
       ]
     }
   ]
