@@ -25,6 +25,7 @@
             margin: 0; 
             line-height: 1.8; 
             overflow-x: hidden;
+            box-sizing: border-box; /* Ensures padding doesn't break width */
         }
 
         /* Arka Plan Logo */
@@ -141,26 +142,27 @@
         footer { padding: 80px 20px; color: #777; background: #050505; text-align: center; border-top: 1px solid #111; }
         .address { color: var(--accent-color); font-weight: bold; font-size: 1.1rem; margin-top: 10px; }
         
-        /* MOBİL UYUMLULUK */
+        /* MOBİL UYUMLULUK DÜZELTİLDİ */
         @media (max-width: 1024px) {
-            nav { flex-direction: column; padding: 20px; gap: 20px; }
+            nav { flex-direction: column; padding: 20px; gap: 20px; position: relative; } /* position relative allows content below to flow naturally */
             .nav-links { display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; }
             .nav-links a { margin-left: 0; font-size: 0.7rem; }
             
             .hero-banner { height: 40vh; } 
             
+            /* Reset widths and margins for mobile */
+            .section-frame { padding: 40px 20px; box-shadow: inset 0 0 0 4px var(--frame-bg), inset 0 0 0 5px #333; }
+            
             #gosterimdekiler, #etkinlikler, #arsiv {
-                max-width: 95vw;
-                width: 95%;
-                margin-left: auto;
-                margin-right: auto;
-                margin-top: 40px; 
+                max-width: 100%; /* Take full width on mobile */
+                width: 90%;
+                margin: 40px auto; /* Centers the sections */
             }
-            #gosterimdekiler { margin-top: 20px; } 
-            .slider-container { height: 45vh; }
+
+            .slider-container { height: 40vh; }
             
             .archive-item { width: 100%; max-width: 400px; }
-            #etkinlikler h2 { text-align: center; }
+            #etkinlikler h2, #gosterimdekiler h2 { text-align: center; }
             .event-box { text-align: center; }
             .section-frame::after { display: none; } 
             
@@ -210,7 +212,7 @@
         <div class="slider-container">
             <div class="nav-strip" onclick="changeSlide(-1)">&#10094;</div>
             <div style="flex-grow: 1; overflow: hidden; position: relative;">
-                <img id="mainGalleryImg" src="gösterimdekiler1.png" class="main-gallery-img" onclick="openModalFromTop()">
+                <img id="mainGalleryImg" src="gosterimdekiler1.png" class="main-gallery-img" onclick="openModalFromTop()">
                 <div id="sliderDots" class="dots-container"></div>
             </div>
             <div class="nav-strip" onclick="changeSlide(1)">&#10095;</div>
@@ -328,8 +330,8 @@
         
         const archiveCollections = {
             'senfoni': ["senfoni.jpg", "senfoni2.jpg"],
-            'esogu': ["senfoni.jpg", "senfoni2.jpg", "adsız.png"],
-            'poeta': ["senfoni.jpg", "senfoni2.jpg", "adsız.png", "adsız.png"]
+            'esogu': ["senfoni.jpg", "senfoni2.jpg", "adsiz.png"],
+            'poeta': ["senfoni.jpg", "senfoni2.jpg", "adsiz.png", "adsiz.png"]
         };
         
         let currentImgIndex = 0;
