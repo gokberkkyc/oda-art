@@ -16,11 +16,7 @@
             --accent-color: #a8947e;
         }
 
-        html { 
-            scroll-behavior: smooth; 
-            overflow-x: hidden; /* Prevents whole-page sideways scrolling */
-            max-width: 100vw;
-        }
+        html { scroll-behavior: smooth; }
         
         * {
             box-sizing: border-box; 
@@ -31,10 +27,9 @@
             color: var(--text-color); 
             font-family: 'Montserrat', sans-serif; 
             margin: 0; 
-            padding: 0;
             line-height: 1.8; 
             overflow-x: hidden;
-            max-width: 100vw;
+            box-sizing: border-box; 
         }
 
         /* Arka Plan Logo */
@@ -63,7 +58,7 @@
             height: 100%; 
             object-fit: cover; 
             cursor: zoom-in; 
-            touch-action: pan-y; /* CRITICAL MOBILE FIX: Stops horizontal page scroll when swiping images */
+            touch-action: pan-y;
         }
 
         .close-btn { position: absolute; top: 20px; right: 40px; color: white; font-size: 40px; cursor: pointer; z-index: 3001; }
@@ -86,7 +81,7 @@
         .toast.show { display: block; transform: translateY(0); opacity: 1; }
         .toast-close { position: absolute; top: 50%; right: 15px; transform: translateY(-50%); cursor: pointer; font-size: 24px; line-height: 1; }
 
-        /* Navigasyon Şeritleri (Oklar) */
+        /* Navigasyon Şeritleri (Sidebar Strips) */
         .nav-strip { 
             width: 80px; display: flex; align-items: center; justify-content: center; 
             background: rgba(255,255,255,0.03); cursor: pointer; transition: all 0.3s;
@@ -97,7 +92,7 @@
         /* Navigasyon */
         nav { 
             position: absolute; top: 0; left: 0; width: 100%; padding: 30px 5%; 
-            display: flex; justify-content: space-between; 
+            box-sizing: border-box; display: flex; justify-content: space-between; 
             align-items: center; background: transparent; z-index: 100; 
         }
         .nav-logo { height: 95px; filter: invert(1); cursor: pointer; transition: transform 0.3s ease; } 
@@ -127,7 +122,7 @@
             filter: brightness(0) invert(1); opacity: 0.35; pointer-events: none; z-index: 0;
         }
 
-        h2 { font-family: 'Playfair Display', serif; text-transform: uppercase; letter-spacing: 0.4rem; margin-bottom: 50px; font-size: 2.2rem; color: #fff; position: relative; z-index: 2; text-align: center;}
+        h2 { font-family: 'Playfair Display', serif; text-transform: uppercase; letter-spacing: 0.4rem; margin-bottom: 50px; font-size: 2.2rem; color: #fff; position: relative; z-index: 2; text-align: center; }
 
         /* Gösterimdekiler */
         #gosterimdekiler { margin-top: -50vh; margin-left: auto; margin-right: 5%; width: 90%; max-width: 50vw; z-index: 10; }
@@ -172,7 +167,6 @@
             
             .hero-banner { height: 40vh; width: 100%; } 
             
-            /* Merkezleme ve Genişlik Ayarları */
             #gosterimdekiler, #etkinlikler, #arsiv {
                 max-width: 100%;
                 width: 90%;
@@ -189,7 +183,6 @@
             .slider-container { height: 40vh; position: relative; width: 100%; }
             .archive-item { width: 100%; max-width: 350px; }
             
-            /* Oklar mobilde resmin üzerine alındı */
             .nav-strip { position: absolute; top: 0; height: 100%; width: 50px; background: rgba(0,0,0,0.3); border: none; z-index: 20;}
             .nav-strip:first-child { left: 0; }
             .nav-strip:last-child { right: 0; }
@@ -239,7 +232,7 @@
         <div class="slider-container" id="mainSliderContainer">
             <div class="nav-strip" onclick="changeSlide(-1)">&#10094;</div>
             <div style="flex-grow: 1; overflow: hidden; position: relative;">
-                <img id="mainGalleryImg" src="gösterimdekiler1.png" class="main-gallery-img" onclick="openModalFromTop()">
+                <img id="mainGalleryImg" src="gosterimdekiler1.png" class="main-gallery-img" onclick="openModalFromTop()">
                 <div id="sliderDots" class="dots-container"></div>
             </div>
             <div class="nav-strip" onclick="changeSlide(1)">&#10095;</div>
@@ -348,7 +341,7 @@
         }, observerOptions);
         document.querySelectorAll('.section-frame').forEach(frame => observer.observe(frame));
 
-        // --- RESİM DİZİLERİ ---
+        // Düzeltilmiş Görsel İsimleri (Array)
         const sliderImages = ["gosterimdekiler1.png", "gosterimdekiler2.png", "gosterimdekiler3.png"]; 
         
         const archiveCollections = {
@@ -499,7 +492,6 @@
             }
         }
 
-        // --- MOBİL İÇİN KAYDIRMA (SWIPE) ÖZELLİĞİ ---
         function setupTouchEvents() {
             let touchstartX = 0;
             let touchendX = 0;
