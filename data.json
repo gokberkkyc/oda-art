@@ -1,12 +1,24 @@
 {
   "slider": [
-    { "image": "gosterimdekiler1.png" },
-    { "image": "gosterimdekiler2.png" },
-    { "image": "gosterimdekiler3.png" }
+    {
+      "image": "gosterimdekiler1.png"
+    },
+    {
+      "image": "gosterimdekiler2.png"
+    },
+    {
+      "image": "gosterimdekiler3.png"
+    }
   ],
   "etkinlikler": [
-    { "title": "Sanatçı Söyleşisi: \"Işık ve Boşluk\"", "date": "15 Temmuz 2026 | 19:00" },
-    { "title": "Atölye: Analog Baskı Teknikleri", "date": "22 Temmuz 2026 | 14:00" }
+    {
+      "title": "Yönetmen Söyleşisi: 9. Senfoni",
+      "date": "15 Temmuz 2026 | 19:00"
+    },
+    {
+      "title": "Atölye: Analog Baskı Teknikleri",
+      "date": "22 Temmuz 2026 | 14:00"
+    }
   ],
   "arsiv": [
     {
@@ -14,8 +26,12 @@
       "title": "9. Senfoni - Kısa Film",
       "coverImage": "senfoni.jpg",
       "images": [
-        { "image": "senfoni.jpg" },
-        { "image": "senfoni2.jpg" }
+        {
+          "image": "senfoni.jpg"
+        },
+        {
+          "image": "senfoni2.jpg"
+        }
       ]
     },
     {
@@ -23,9 +39,15 @@
       "title": "ESOGÜ Endüstriyel Tasarım Sergisi",
       "coverImage": "senfoni2.jpg",
       "images": [
-        { "image": "senfoni.jpg" },
-        { "image": "senfoni2.jpg" },
-        { "image": "adsız.png" }
+        {
+          "image": "senfoni.jpg"
+        },
+        {
+          "image": "senfoni2.jpg"
+        },
+        {
+          "image": "adsız.png"
+        }
       ]
     },
     {
@@ -33,10 +55,18 @@
       "title": "POETA Atölyesi",
       "coverImage": "senfoni.jpg",
       "images": [
-        { "image": "senfoni.jpg" },
-        { "image": "senfoni2.jpg" },
-        { "image": "adsız.png" },
-        { "image": "adsız.png" }
+        {
+          "image": "senfoni.jpg"
+        },
+        {
+          "image": "senfoni2.jpg"
+        },
+        {
+          "image": "adsız.png"
+        },
+        {
+          "image": "adsız.png"
+        }
       ]
     }
   ]
