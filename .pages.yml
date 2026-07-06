@@ -31,7 +31,7 @@ content:
         list: true
         fields:
           - name: id
-            label: ID (Boşluksuz İngilizce karakter, örn: yenisergi)
+            label: "ID (Boşluksuz İngilizce karakter, örn: yenisergi)"
             type: string
           - name: title
             label: Arşiv Başlığı (Ekranda Görünen)
