@@ -4,16 +4,40 @@
     { "image": "gosterimdekiler2.png" },
     { "image": "gosterimdekiler3.png" }
   ],
-  "senfoni": [
-    { "image": "senfoni.jpg" }
+  "etkinlikler": [
+    { "title": "Sanatçı Söyleşisi: \"Işık ve Boşluk\"", "date": "15 Temmuz 2026 | 19:00" },
+    { "title": "Atölye: Analog Baskı Teknikleri", "date": "22 Temmuz 2026 | 14:00" }
   ],
-  "esogu": [
-    { "image": "senfoni2.jpg" },
-    { "image": "adsız.png" }
-  ],
-  "poeta": [
-    { "image": "senfoni.jpg" },
-    { "image": "adsız.png" },
-    { "image": "adsız.png" }
+  "arsiv": [
+    {
+      "id": "senfoni",
+      "title": "9. Senfoni - Kısa Film",
+      "coverImage": "senfoni.jpg",
+      "images": [
+        { "image": "senfoni.jpg" },
+        { "image": "senfoni2.jpg" }
+      ]
+    },
+    {
+      "id": "esogu",
+      "title": "ESOGÜ Endüstriyel Tasarım Sergisi",
+      "coverImage": "senfoni2.jpg",
+      "images": [
+        { "image": "senfoni.jpg" },
+        { "image": "senfoni2.jpg" },
+        { "image": "adsız.png" }
+      ]
+    },
+    {
+      "id": "poeta",
+      "title": "POETA Atölyesi",
+      "coverImage": "senfoni.jpg",
+      "images": [
+        { "image": "senfoni.jpg" },
+        { "image": "senfoni2.jpg" },
+        { "image": "adsız.png" },
+        { "image": "adsız.png" }
+      ]
+    }
   ]
 }
