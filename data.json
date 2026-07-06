@@ -1,13 +1,13 @@
 {
   "slider": [
     {
-      "image": "gosterimdekiler1.png"
+      "image": "/gosterimdekiler1.png"
     },
     {
-      "image": "gosterimdekiler2.png"
+      "image": "/gosterimdekiler2.png"
     },
     {
-      "image": "gosterimdekiler3.png"
+      "image": "/gosterimdekiler3.png"
     }
   ],
   "etkinlikler": [
@@ -24,50 +24,55 @@
     {
       "id": "senfoni",
       "title": "9. Senfoni - Kısa Film",
-      "coverImage": "senfoni.jpg",
+      "coverImage": "/senfoni.jpg",
       "images": [
         {
-          "image": "senfoni.jpg"
+          "image": "/senfoni.jpg"
         },
         {
-          "image": "senfoni2.jpg"
+          "image": "/senfoni2.jpg"
         }
       ]
     },
     {
       "id": "esogu",
       "title": "ESOGÜ Endüstriyel Tasarım Sergisi",
-      "coverImage": "senfoni2.jpg",
+      "coverImage": "/senfoni2.jpg",
       "images": [
         {
-          "image": "senfoni.jpg"
+          "image": "/senfoni.jpg"
         },
         {
-          "image": "senfoni2.jpg"
+          "image": "/senfoni2.jpg"
         },
         {
-          "image": "adsız.png"
+          "image": "/adsız.png"
         }
       ]
     },
     {
       "id": "poeta",
       "title": "POETA Atölyesi",
-      "coverImage": "senfoni.jpg",
+      "coverImage": "/senfoni.jpg",
       "images": [
         {
-          "image": "senfoni.jpg"
+          "image": "/senfoni.jpg"
         },
         {
-          "image": "senfoni2.jpg"
+          "image": "/senfoni2.jpg"
         },
         {
-          "image": "adsız.png"
+          "image": "/adsız.png"
         },
         {
-          "image": "adsız.png"
+          "image": "/adsız.png"
         }
       ]
+    },
+    {
+      "id": "fahri",
+      "title": "Fahri Baba",
+      "coverImage": "/odaartlogo-1.png"
     }
   ]
 }
