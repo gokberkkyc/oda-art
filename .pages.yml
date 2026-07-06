@@ -1,8 +1,8 @@
 media: "."
 
 content:
-  - name: galeri
-    label: Galeri ve Arşiv Yönetimi
+  - name: data
+    label: Site Verileri (Etkinlik, Galeri, Arşiv)
     type: file
     path: data.json
     fields:
@@ -12,29 +12,38 @@ content:
         list: true
         fields:
           - name: image
-            label: Fotoğraf Seç veya Yükle
+            label: Fotoğraf
             type: image
-      - name: senfoni
-        label: 9. Senfoni Arşivi
+      - name: etkinlikler
+        label: Etkinlikler
         type: object
         list: true
         fields:
-          - name: image
-            label: Fotoğraf Seç veya Yükle
-            type: image
-      - name: esogu
-        label: ESOGÜ Arşivi
+          - name: title
+            label: Etkinlik Başlığı
+            type: string
+          - name: date
+            label: Tarih ve Saat
+            type: string
+      - name: arsiv
+        label: Arşiv Galerileri
         type: object
         list: true
         fields:
-          - name: image
-            label: Fotoğraf Seç veya Yükle
+          - name: id
+            label: ID (Boşluksuz İngilizce karakter, örn: yenisergi)
+            type: string
+          - name: title
+            label: Arşiv Başlığı (Ekranda Görünen)
+            type: string
+          - name: coverImage
+            label: Kapak Fotoğrafı
             type: image
-      - name: poeta
-        label: POETA Arşivi
-        type: object
-        list: true
-        fields:
-          - name: image
-            label: Fotoğraf Seç veya Yükle
-            type: image
+          - name: images
+            label: Galeri İçindeki Fotoğraflar
+            type: object
+            list: true
+            fields:
+              - name: image
+                label: Fotoğraf Seç
+                type: image
