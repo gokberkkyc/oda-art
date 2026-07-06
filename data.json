@@ -68,19 +68,6 @@
           "image": "/adsız.png"
         }
       ]
-    },
-    {
-      "id": "fahri",
-      "title": "FahriBaba",
-      "coverImage": "/european.png",
-      "images": [
-        {
-          "image": "/Kokopelli1.png"
-        },
-        {
-          "image": "/image_fcf439.jpg"
-        }
-      ]
     }
   ]
 }
