@@ -62,7 +62,7 @@
         .toast.show { display: block; transform: translateY(0); opacity: 1; }
         .toast-close { position: absolute; top: 50%; right: 15px; transform: translateY(-50%); cursor: pointer; font-size: 24px; line-height: 1; }
 
-        /* Navigasyon Şeritleri (Sidebar Strips) */
+        /* Navigasyon Şeritleri */
         .nav-strip { width: 80px; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.03); cursor: pointer; transition: all 0.3s; font-size: 2rem; color: #fff; border: 1px solid #222; z-index: 10; }
         .nav-strip:hover { background: rgba(168, 148, 126, 0.2); color: var(--accent-color); }
 
@@ -76,7 +76,7 @@
         /* Hero Banner */
         .hero-banner { width: 100%; height: 85vh; background-image: linear-gradient(to right, rgba(5,5,5,0) 40%, rgba(5,5,5,1) 95%), url('odaartinterior.jpg'); background-size: cover; background-position: center; position: relative; }
 
-        /* Çerçeveler & Scroll Geçiş Efektleri */
+        /* Çerçeveler */
         .section-frame { position: relative; padding: 80px 40px; background-color: var(--frame-bg); border: 1px solid #111; border-radius: 4px; box-shadow: inset 0 0 0 8px var(--frame-bg), inset 0 0 0 9px #333, 0 15px 40px rgba(0,0,0,0.8); opacity: 0; transform: translateY(50px); transition: opacity 1s ease-out, transform 1s cubic-bezier(0.2, 0.8, 0.2, 1); }
         .section-frame.visible { opacity: 1; transform: translateY(0); }
         .section-frame::after { content: ""; position: absolute; bottom: 25px; right: 25px; width: 140px; height: 140px; background-image: url('odamaskot.png'); background-size: contain; background-repeat: no-repeat; filter: brightness(0) invert(1); opacity: 0.35; pointer-events: none; z-index: 0; }
@@ -153,7 +153,6 @@
         <span class="toast-close" onclick="closeToast()">&times;</span>
     </div>
 
-    <!-- Modal (Lightbox) -->
     <div id="imageModal" class="modal">
         <span class="close-btn" onclick="closeModal()">&times;</span>
         <div class="modal-content">
@@ -185,27 +184,21 @@
         <div class="slider-container" id="mainSliderContainer">
             <div class="nav-strip" onclick="changeSlide(-1)">&#10094;</div>
             <div style="flex-grow: 1; overflow: hidden; position: relative;">
-                <img id="mainGalleryImg" src="" class="main-gallery-img" onclick="openModalFromTop()">
+                <img id="mainGalleryImg" src="gosterimdekiler1.png" class="main-gallery-img" onclick="openModalFromTop()">
                 <div id="sliderDots" class="dots-container"></div>
             </div>
             <div class="nav-strip" onclick="changeSlide(1)">&#10095;</div>
         </div>
     </section>
 
-    <!-- ETKİNLİKLER ŞİMDİ DİNAMİK -->
     <section id="etkinlikler" class="section-frame">
         <h2>Etkinlikler</h2>
-        <div id="etkinliklerContainer">
-            <!-- JavaScript burayı dolduracak -->
-        </div>
+        <div id="etkinliklerContainer"></div>
     </section>
 
-    <!-- ARŞİV ŞİMDİ DİNAMİK -->
     <section id="arsiv" class="section-frame">
         <h2>Arşiv</h2>
-        <div class="archive-container" id="arsivContainer">
-            <!-- JavaScript burayı dolduracak -->
-        </div>
+        <div class="archive-container" id="arsivContainer"></div>
     </section>
 
     <footer id="iletisim">
@@ -230,7 +223,6 @@
     </footer>
 
     <script>
-        // --- FORM GÖNDERİM ---
         document.getElementById("etkinlikForm").addEventListener("submit", function(event) {
             event.preventDefault(); 
             const form = event.target;
@@ -255,7 +247,6 @@
             setTimeout(() => toast.style.display = "none", 400);
         }
 
-        // --- SCROLL ANİMASYONU ---
         const observerOptions = { threshold: 0.05, rootMargin: "0px" };
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
@@ -267,7 +258,7 @@
         }, observerOptions);
         document.querySelectorAll('.section-frame').forEach(frame => observer.observe(frame));
 
-        // --- DİNAMİK RESİM VE İÇERİK DİZİLERİ (CMS BAĞLANTISI) ---
+        // --- CMS BAĞLANTISI VE DİNAMİK YAPILAR ---
         let sliderImages = [];
         let archiveCollections = {};
         let currentImgIndex = 0;
@@ -275,15 +266,21 @@
         let currentModalMode = 'slider'; 
         let currentActiveArray = [];
 
-        // CMS'den verileri çekiyoruz
-        fetch('data.json')
+        // Yardımcı fonksiyon: CMS'ten gelen yollardaki "/" hatasını temizler
+        const cleanImg = (imgStr) => {
+            if (!imgStr) return '';
+            return imgStr.startsWith('/') ? imgStr.substring(1) : imgStr;
+        };
+
+        // CACHE BUSTER: Browser belleğinde kalan eski veriyi engellemek için zaman damgası ekliyoruz
+        fetch('data.json?v=' + new Date().getTime())
             .then(response => response.json())
             .then(data => {
                 // 1. Slider Verileri
-                sliderImages = data.slider ? data.slider.map(item => item.image) : [];
+                sliderImages = data.slider ? data.slider.map(item => cleanImg(item.image)).filter(Boolean) : [];
                 currentActiveArray = sliderImages;
                 
-                // 2. Etkinlikler Verileri (HTML'e Yazdır)
+                // 2. Etkinlikler Verileri
                 const etkinliklerContainer = document.getElementById('etkinliklerContainer');
                 if(data.etkinlikler && data.etkinlikler.length > 0) {
                     etkinliklerContainer.innerHTML = data.etkinlikler.map(etk => `
@@ -296,25 +293,27 @@
                     etkinliklerContainer.innerHTML = '<p style="color: var(--accent-color);">Yaklaşan etkinlik bulunmamaktadır.</p>';
                 }
 
-                // 3. Arşiv Verileri (HTML'e Yazdır ve Koleksiyonu Oluştur)
-               // Change this part in your script:
-if(data.arsiv && data.arsiv.length > 0) {
-    arsivContainer.innerHTML = data.arsiv.map(arsivItem => {
-        const coverImg = cleanImg(arsivItem.coverImage);
-        
-        // GÜNCELLEME: Eğer images yoksa boş dizi olarak tanımla (hata vermesin)
-        archiveCollections[arsivItem.id] = (arsivItem.images && Array.isArray(arsivItem.images)) 
-            ? arsivItem.images.map(img => cleanImg(img.image)).filter(Boolean) 
-            : [];
-        
-        return `
-        <div class="archive-item" onclick="openModalFromArchive('${arsivItem.id}')">
-            <img src="${coverImg}" alt="${arsivItem.title}">
-            <div class="overlay"><h3>${arsivItem.title}</h3></div>
-        </div>
-        `;
-    }).join('');
-}
+                // 3. Arşiv Verileri
+                const arsivContainer = document.getElementById('arsivContainer');
+                archiveCollections = {}; 
+                
+                if(data.arsiv && data.arsiv.length > 0) {
+                    arsivContainer.innerHTML = data.arsiv.map(arsivItem => {
+                        const coverImg = cleanImg(arsivItem.coverImage);
+                        
+                        archiveCollections[arsivItem.id] = arsivItem.images 
+                            ? arsivItem.images.map(img => cleanImg(img.image)).filter(Boolean) 
+                            : [];
+                        
+                        return `
+                        <div class="archive-item" onclick="openModalFromArchive('${arsivItem.id}')">
+                            <img src="${coverImg}" alt="${arsivItem.title}">
+                            <div class="overlay"><h3>${arsivItem.title}</h3></div>
+                        </div>
+                        `;
+                    }).join('');
+                }
+
                 initGallery();
             })
             .catch(error => {
