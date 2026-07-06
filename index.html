@@ -196,7 +196,7 @@
             .form-container { padding: 30px 20px; width: 100%; box-sizing: border-box; }
         }
 
-        /* Çok Küçük Telefonlar İçin (iPhone SE vs.) Text Overflow Engelleme */
+        /* Çok Küçük Telefonlar İçin Text Overflow Engelleme */
         @media (max-width: 400px) {
             h2 { 
                 font-size: 1.35rem !important; 
@@ -243,7 +243,7 @@
         <div class="slider-container" id="mainSliderContainer">
             <div class="nav-strip" onclick="changeSlide(-1)">&#10094;</div>
             <div style="flex-grow: 1; overflow: hidden; position: relative;">
-                <img id="mainGalleryImg" src="gosterimdekiler1.png" class="main-gallery-img" onclick="openModalFromTop()">
+                <img id="mainGalleryImg" src="" class="main-gallery-img" onclick="openModalFromTop()">
                 <div id="sliderDots" class="dots-container"></div>
             </div>
             <div class="nav-strip" onclick="changeSlide(1)">&#10095;</div>
@@ -302,14 +302,7 @@
     </footer>
 
     <script>
-        if (window.netlifyIdentity) {
-            window.netlifyIdentity.on("init", user => {
-                if (!user && window.location.hash.includes("recovery_token")) {
-                    window.netlifyIdentity.open("recovery");
-                }
-            });
-        }
-
+        // --- FORM GÖNDERİM ---
         document.getElementById("etkinlikForm").addEventListener("submit", function(event) {
             event.preventDefault(); 
             const form = event.target;
@@ -341,6 +334,7 @@
             setTimeout(() => toast.style.display = "none", 400);
         }
 
+        // --- SCROLL ANİMASYONU ---
         const observerOptions = { threshold: 0.05, rootMargin: "0px" };
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
@@ -352,19 +346,43 @@
         }, observerOptions);
         document.querySelectorAll('.section-frame').forEach(frame => observer.observe(frame));
 
-        // --- DİNAMİK RESİM DİZİLERİ ---
-        const sliderImages = ["gosterimdekiler1.png", "gosterimdekiler2.png", "gosterimdekiler3.png"]; 
-        
-        const archiveCollections = {
-            'senfoni': ["senfoni.jpg", "senfoni2.jpg"],
-            'esogu': ["senfoni.jpg", "senfoni2.jpg", "adsız.png"],
-            'poeta': ["senfoni.jpg", "senfoni2.jpg", "adsız.png", "adsız.png"]
-        };
-        
+        // --- DİNAMİK RESİM DİZİLERİ (CMS BAĞLANTISI) ---
+        let sliderImages = [];
+        let archiveCollections = {};
         let currentImgIndex = 0;
         let slideInterval;
         let currentModalMode = 'slider'; 
-        let currentActiveArray = sliderImages;
+        let currentActiveArray = [];
+
+        // 1. Veriyi CMS dosyasından (data.json) çekiyoruz
+        fetch('data.json')
+            .then(response => response.json())
+            .then(data => {
+                // CMS'ten gelen verileri JavaScript dizilerine dönüştürüyoruz
+                sliderImages = data.slider ? data.slider.map(item => item.image) : [];
+                
+                archiveCollections = {
+                    'senfoni': data.senfoni ? data.senfoni.map(item => item.image) : [],
+                    'esogu': data.esogu ? data.esogu.map(item => item.image) : [],
+                    'poeta': data.poeta ? data.poeta.map(item => item.image) : []
+                };
+
+                currentActiveArray = sliderImages;
+                initGallery();
+            })
+            .catch(error => {
+                console.error("Resimler JSON'dan yüklenemedi. Yerel fallback kullanılıyor.", error);
+                
+                // FALLBACK: Sadece yerel PC'de çift tıklayıp açtığınızda hata vermemesi için
+                sliderImages = ["gosterimdekiler1.png", "gosterimdekiler2.png", "gosterimdekiler3.png"];
+                archiveCollections = {
+                    'senfoni': ["senfoni.jpg", "senfoni2.jpg"],
+                    'esogu': ["senfoni.jpg", "senfoni2.jpg", "adsız.png"],
+                    'poeta': ["senfoni.jpg", "senfoni2.jpg", "adsız.png", "adsız.png"]
+                };
+                currentActiveArray = sliderImages;
+                initGallery();
+            });
 
         // --- PRELOADER (Hızlı Yükleme İçin) ---
         function preloadImages() {
@@ -374,16 +392,19 @@
             }
             const uniqueImages = [...new Set(allImages)];
             uniqueImages.forEach(src => {
-                const img = new Image();
-                img.src = src;
+                if(src) {
+                    const img = new Image();
+                    img.src = src;
+                }
             });
         }
 
-        document.addEventListener('DOMContentLoaded', () => {
-            // Arka planda resimleri indir
+        // Galeriyi Başlatma Fonksiyonu
+        function initGallery() {
             preloadImages();
 
             const dotsContainer = document.getElementById("sliderDots");
+            dotsContainer.innerHTML = ''; 
             
             sliderImages.forEach((img, idx) => {
                 const dot = document.createElement("span");
@@ -392,10 +413,15 @@
                 dotsContainer.appendChild(dot);
             });
             
+            // Veri geldiğinde ilk resmi göster
+            if (sliderImages.length > 0) {
+                document.getElementById("mainGalleryImg").src = sliderImages[0];
+            }
+            
             updateDotsVisuals();
             startInterval();
             setupTouchEvents(); 
-        });
+        }
 
         function updateDotsVisuals() {
             const dots = document.querySelectorAll("#sliderDots .dot");
@@ -422,6 +448,7 @@
         }
 
         function goToSlide(newIndex) {
+            if (sliderImages.length === 0) return;
             currentImgIndex = newIndex;
             const mainImg = document.getElementById("mainGalleryImg");
             transitionImage(mainImg, sliderImages[currentImgIndex]);
@@ -429,11 +456,13 @@
         }
 
         function changeSlide(direction) {
+            if (sliderImages.length === 0) return;
             let nextIndex = (currentImgIndex + direction + sliderImages.length) % sliderImages.length;
             goToSlide(nextIndex);
         }
 
         function startInterval() {
+            if (sliderImages.length <= 1) return;
             slideInterval = setInterval(() => {
                 let nextIndex = (currentImgIndex + 1) % sliderImages.length;
                 goToSlide(nextIndex);
@@ -458,6 +487,7 @@
         }
 
         function openModalFromTop() {
+            if (sliderImages.length === 0) return;
             currentModalMode = 'slider';
             currentActiveArray = sliderImages;
             setupModalDots(currentActiveArray);
@@ -466,7 +496,8 @@
 
         function openModalFromArchive(collectionKey) {
             currentModalMode = 'archive';
-            currentActiveArray = archiveCollections[collectionKey];
+            currentActiveArray = archiveCollections[collectionKey] || [];
+            if (currentActiveArray.length === 0) return;
             currentImgIndex = 0; 
             
             setupModalDots(currentActiveArray);
@@ -487,7 +518,6 @@
             modal.style.display = "block";
             clearInterval(slideInterval); 
             
-            // Telefon Geri Tuşu (History API)
             history.pushState({ modalOpen: true }, "", "#galeri");
 
             if(currentActiveArray.length <= 1) {
@@ -510,11 +540,9 @@
             changeModalTo(nextIndex);
         }
 
-        // isFromBackButton parametresi geri tuşuna basıldığında url'in bozulmamasını sağlar
         function closeModal(isFromBackButton = false) {
             document.getElementById("imageModal").style.display = "none";
             
-            // Eğer çarpı (X) butonuna basıldıysa ve url'de #galeri varsa, geri giderek temizle
             if (!isFromBackButton && history.state && history.state.modalOpen) {
                 history.back();
             }
@@ -528,11 +556,10 @@
             }
         }
 
-        // Telefonun fiziksel geri tuşunu algılama
         window.addEventListener('popstate', (event) => {
             const modal = document.getElementById("imageModal");
             if (modal.style.display === "block") {
-                closeModal(true); // true = geri tuşundan tetiklendi
+                closeModal(true); 
             }
         });
 
