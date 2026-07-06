@@ -1,0 +1,19 @@
+{
+  "slider": [
+    { "image": "gosterimdekiler1.png" },
+    { "image": "gosterimdekiler2.png" },
+    { "image": "gosterimdekiler3.png" }
+  ],
+  "senfoni": [
+    { "image": "senfoni.jpg" }
+  ],
+  "esogu": [
+    { "image": "senfoni2.jpg" },
+    { "image": "adsız.png" }
+  ],
+  "poeta": [
+    { "image": "senfoni.jpg" },
+    { "image": "adsız.png" },
+    { "image": "adsız.png" }
+  ]
+}
