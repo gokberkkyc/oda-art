@@ -297,24 +297,24 @@
                 }
 
                 // 3. Arşiv Verileri (HTML'e Yazdır ve Koleksiyonu Oluştur)
-                const arsivContainer = document.getElementById('arsivContainer');
-                archiveCollections = {}; // Sıfırla
-                
-                if(data.arsiv && data.arsiv.length > 0) {
-                    arsivContainer.innerHTML = data.arsiv.map(arsivItem => {
-                        // Modal için JS sözlüğünü doldur
-                        archiveCollections[arsivItem.id] = arsivItem.images ? arsivItem.images.map(img => img.image) : [];
-                        
-                        // Ekrana Arşiv Kutusunu Çiz
-                        return `
-                        <div class="archive-item" onclick="openModalFromArchive('${arsivItem.id}')">
-                            <img src="${arsivItem.coverImage}" alt="${arsivItem.title}">
-                            <div class="overlay"><h3>${arsivItem.title}</h3></div>
-                        </div>
-                        `;
-                    }).join('');
-                }
-
+               // Change this part in your script:
+if(data.arsiv && data.arsiv.length > 0) {
+    arsivContainer.innerHTML = data.arsiv.map(arsivItem => {
+        const coverImg = cleanImg(arsivItem.coverImage);
+        
+        // GÜNCELLEME: Eğer images yoksa boş dizi olarak tanımla (hata vermesin)
+        archiveCollections[arsivItem.id] = (arsivItem.images && Array.isArray(arsivItem.images)) 
+            ? arsivItem.images.map(img => cleanImg(img.image)).filter(Boolean) 
+            : [];
+        
+        return `
+        <div class="archive-item" onclick="openModalFromArchive('${arsivItem.id}')">
+            <img src="${coverImg}" alt="${arsivItem.title}">
+            <div class="overlay"><h3>${arsivItem.title}</h3></div>
+        </div>
+        `;
+    }).join('');
+}
                 initGallery();
             })
             .catch(error => {
