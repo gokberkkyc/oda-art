@@ -72,7 +72,15 @@
     {
       "id": "fahri",
       "title": "FahriBaba",
-      "coverImage": "/european.png"
+      "coverImage": "/european.png",
+      "images": [
+        {
+          "image": "/Kokopelli1.png"
+        },
+        {
+          "image": "/image_fcf439.jpg"
+        }
+      ]
     }
   ]
 }
