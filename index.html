@@ -18,6 +18,10 @@
 
         html { scroll-behavior: smooth; }
         
+        * {
+            box-sizing: border-box; /* Bu satır ekranın dışa taşmasını engeller */
+        }
+        
         body { 
             background-color: var(--bg-color); 
             color: var(--text-color); 
@@ -25,7 +29,6 @@
             margin: 0; 
             line-height: 1.8; 
             overflow-x: hidden;
-            box-sizing: border-box; /* Ensures padding doesn't break width */
         }
 
         /* Arka Plan Logo */
@@ -40,8 +43,17 @@
         .modal { display: none; position: fixed; z-index: 3000; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.98); }
         .modal-content { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; width: 100%; position: relative; }
         .modal-frame { display: flex; height: 75vh; width: 85%; border: 2px solid #333; background: #000; overflow: hidden; position: relative; }
-        .modal-img-container { flex-grow: 1; display: flex; align-items: center; justify-content: center; overflow: hidden; }
-        .modal-img { max-width: 100%; max-height: 100%; object-fit: contain; transition: opacity 0.3s ease-in-out; }
+        .modal-img-container { flex-grow: 1; display: flex; align-items: center; justify-content: center; overflow: hidden; position: relative; }
+        
+        /* Geçiş Efektleri İçin Sınıflar */
+        .modal-img, .main-gallery-img { 
+            max-width: 100%; 
+            max-height: 100%; 
+            object-fit: contain; 
+            transition: opacity 0.25s ease, transform 0.25s ease; 
+        }
+        .main-gallery-img { width: 100%; height: 100%; object-fit: cover; cursor: zoom-in; }
+
         .close-btn { position: absolute; top: 20px; right: 40px; color: white; font-size: 40px; cursor: pointer; z-index: 3001; }
         
         .modal-dots-container {
@@ -62,7 +74,7 @@
         .toast.show { display: block; transform: translateY(0); opacity: 1; }
         .toast-close { position: absolute; top: 50%; right: 15px; transform: translateY(-50%); cursor: pointer; font-size: 24px; line-height: 1; }
 
-        /* Navigasyon Şeritleri (Sidebar Strips) */
+        /* Navigasyon Şeritleri (Oklar) */
         .nav-strip { 
             width: 80px; display: flex; align-items: center; justify-content: center; 
             background: rgba(255,255,255,0.03); cursor: pointer; transition: all 0.3s;
@@ -73,7 +85,7 @@
         /* Navigasyon */
         nav { 
             position: absolute; top: 0; left: 0; width: 100%; padding: 30px 5%; 
-            box-sizing: border-box; display: flex; justify-content: space-between; 
+            display: flex; justify-content: space-between; 
             align-items: center; background: transparent; z-index: 100; 
         }
         .nav-logo { height: 95px; filter: invert(1); cursor: pointer; transition: transform 0.3s ease; } 
@@ -103,16 +115,14 @@
             filter: brightness(0) invert(1); opacity: 0.35; pointer-events: none; z-index: 0;
         }
 
-        h2 { font-family: 'Playfair Display', serif; text-transform: uppercase; letter-spacing: 0.4rem; margin-bottom: 50px; font-size: 2.2rem; color: #fff; position: relative; z-index: 2; }
+        h2 { font-family: 'Playfair Display', serif; text-transform: uppercase; letter-spacing: 0.4rem; margin-bottom: 50px; font-size: 2.2rem; color: #fff; position: relative; z-index: 2; text-align: center;}
 
         /* Gösterimdekiler */
         #gosterimdekiler { margin-top: -50vh; margin-left: auto; margin-right: 5%; width: 90%; max-width: 50vw; z-index: 10; }
-        #gosterimdekiler h2 { text-align: center; }
         .slider-container { display: flex; width: 100%; height: 65vh; margin: auto; border: 1px solid #333; border-radius: 4px; overflow: hidden; background: #000; position: relative; z-index: 2; }
-        .main-gallery-img { width: 100%; height: 100%; object-fit: cover; transition: opacity 0.5s ease-in-out; cursor: zoom-in; }
 
-        .dots-container { position: absolute; bottom: 20px; width: 100%; display: flex; justify-content: center; gap: 12px; z-index: 5; }
-        .dot { width: 12px; height: 12px; border-radius: 50%; background-color: rgba(255, 255, 255, 0.3); cursor: pointer; transition: all 0.3s ease; }
+        .dots-container { position: absolute; bottom: 20px; width: 100%; display: flex; justify-content: center; gap: 12px; z-index: 5; pointer-events: none; }
+        .dot { width: 12px; height: 12px; border-radius: 50%; background-color: rgba(255, 255, 255, 0.3); cursor: pointer; transition: all 0.3s ease; pointer-events: auto; }
         .dot.active, .dot:hover { background-color: var(--accent-color); transform: scale(1.2); }
 
         /* Etkinlikler */
@@ -125,7 +135,6 @@
 
         /* Arşiv */
         #arsiv { margin: 15vh auto 10vh auto; width: 90%; max-width: 80vw; z-index: 12; }
-        #arsiv h2 { text-align: center; }
         .archive-container { display: flex; justify-content: center; gap: 40px; flex-wrap: wrap; position: relative; z-index: 2; }
         .archive-item { width: 320px; cursor: pointer; position: relative; border-radius: 4px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.6); }
         .archive-item img { width: 100%; height: 220px; object-fit: cover; display: block; }
@@ -135,42 +144,47 @@
 
         /* İletişim / Form */
         .form-container { background: rgba(0,0,0,0.2); padding: 50px; border: 1px solid #333; border-radius: 4px; max-width: 600px; margin: 50px auto; }
-        input { display: block; width: 100%; padding: 15px; margin: 15px 0; background: #000; border: 1px solid #444; border-radius: 4px; color: white; box-sizing: border-box; }
+        input { display: block; width: 100%; padding: 15px; margin: 15px 0; background: #000; border: 1px solid #444; border-radius: 4px; color: white; outline: none;}
+        input:focus { border-color: var(--accent-color); }
         button { background: var(--accent-color); border: none; padding: 15px 40px; cursor: pointer; text-transform: uppercase; width: 100%; font-weight: bold; letter-spacing: 0.15rem; border-radius: 4px; transition: background 0.3s; }
         button:hover { background: #c2ab91; }
         
         footer { padding: 80px 20px; color: #777; background: #050505; text-align: center; border-top: 1px solid #111; }
         .address { color: var(--accent-color); font-weight: bold; font-size: 1.1rem; margin-top: 10px; }
         
-        /* MOBİL UYUMLULUK DÜZELTİLDİ */
+        /* MOBİL UYUMLULUK DÜZELTİLDİ VE TELEFONLARA ÖZEL AYARLANDI */
         @media (max-width: 1024px) {
-            nav { flex-direction: column; padding: 20px; gap: 20px; position: relative; } /* position relative allows content below to flow naturally */
+            nav { position: relative; flex-direction: column; padding: 25px 20px; gap: 20px; background: rgba(0,0,0,0.8); }
             .nav-links { display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; }
-            .nav-links a { margin-left: 0; font-size: 0.7rem; }
+            .nav-links a { margin-left: 0; font-size: 0.75rem; }
             
             .hero-banner { height: 40vh; } 
             
-            /* Reset widths and margins for mobile */
-            .section-frame { padding: 40px 20px; box-shadow: inset 0 0 0 4px var(--frame-bg), inset 0 0 0 5px #333; }
-            
+            /* Bölümler mobilde ortalandı ve taşkınlıklar giderildi */
             #gosterimdekiler, #etkinlikler, #arsiv {
-                max-width: 100%; /* Take full width on mobile */
-                width: 90%;
-                margin: 40px auto; /* Centers the sections */
+                max-width: 100%;
+                width: 92%;
+                margin: 40px auto;
             }
-
-            .slider-container { height: 40vh; }
             
-            .archive-item { width: 100%; max-width: 400px; }
-            #etkinlikler h2, #gosterimdekiler h2 { text-align: center; }
-            .event-box { text-align: center; }
+            .section-frame { padding: 40px 20px; box-shadow: inset 0 0 0 4px var(--frame-bg), inset 0 0 0 5px #333; }
             .section-frame::after { display: none; } 
             
-            .nav-strip { width: 50px; font-size: 1.5rem; }
-            .modal-frame { width: 95%; height: 60vh; }
-            .close-btn { top: 10px; right: 20px; font-size: 30px; }
+            #etkinlikler h2 { text-align: center; }
+            .event-box { text-align: center; }
+
+            .slider-container { height: 40vh; position: relative; }
+            .archive-item { width: 100%; max-width: 350px; }
             
-            .form-container { padding: 30px 20px; }
+            /* Oklar mobilde resmin üzerine alındı (Yer tasarrufu) */
+            .nav-strip { position: absolute; top: 0; height: 100%; width: 50px; background: rgba(0,0,0,0.3); border: none; z-index: 20;}
+            .nav-strip:first-child { left: 0; }
+            .nav-strip:last-child { right: 0; }
+            
+            .modal-frame { width: 100%; height: 65vh; border: none; }
+            .close-btn { top: 15px; right: 25px; font-size: 35px; }
+            
+            .form-container { padding: 30px 20px; width: 100%; }
         }
     </style>
 </head>
@@ -181,10 +195,11 @@
         <span class="toast-close" onclick="closeToast()">&times;</span>
     </div>
 
+    <!-- Modal (Lightbox) -->
     <div id="imageModal" class="modal">
         <span class="close-btn" onclick="closeModal()">&times;</span>
         <div class="modal-content">
-            <div class="modal-frame">
+            <div class="modal-frame" id="modalFrameContainer">
                 <div class="nav-strip" id="modalPrevBtn" onclick="changeModal(-1)">&#10094;</div>
                 <div class="modal-img-container">
                     <img id="modalImg" class="modal-img" src="" alt="Galeri">
@@ -209,10 +224,10 @@
 
     <section id="gosterimdekiler" class="section-frame">
         <h2>Gösterimdekiler</h2>
-        <div class="slider-container">
+        <div class="slider-container" id="mainSliderContainer">
             <div class="nav-strip" onclick="changeSlide(-1)">&#10094;</div>
             <div style="flex-grow: 1; overflow: hidden; position: relative;">
-                <img id="mainGalleryImg" src="gosterimdekiler1.png" class="main-gallery-img" onclick="openModalFromTop()">
+                <img id="mainGalleryImg" src="gösterimdekiler1.png" class="main-gallery-img" onclick="openModalFromTop()">
                 <div id="sliderDots" class="dots-container"></div>
             </div>
             <div class="nav-strip" onclick="changeSlide(1)">&#10095;</div>
@@ -324,14 +339,13 @@
         }, observerOptions);
         document.querySelectorAll('.section-frame').forEach(frame => observer.observe(frame));
 
-
-        // --- DİNAMİK RESİM DİZİLERİ VE MODAL MANTIĞI ---
-        const sliderImages = ["gosterimdekiler1.png", "gosterimdekiler2.png", "gosterimdekiler3.png"]; 
+        // --- DİNAMİK RESİM DİZİLERİ ---
+        const sliderImages = ["gösterimdekiler1.png", "gösterimdekiler2.png", "gösterimdekiler3.png"]; 
         
         const archiveCollections = {
             'senfoni': ["senfoni.jpg", "senfoni2.jpg"],
-            'esogu': ["senfoni.jpg", "senfoni2.jpg", "adsiz.png"],
-            'poeta': ["senfoni.jpg", "senfoni2.jpg", "adsiz.png", "adsiz.png"]
+            'esogu': ["senfoni.jpg", "senfoni2.jpg", "adsız.png"],
+            'poeta': ["senfoni.jpg", "senfoni2.jpg", "adsız.png", "adsız.png"]
         };
         
         let currentImgIndex = 0;
@@ -339,10 +353,10 @@
         let currentModalMode = 'slider'; 
         let currentActiveArray = sliderImages;
 
+        // Başlangıç Ayarları
         document.addEventListener('DOMContentLoaded', () => {
             const dotsContainer = document.getElementById("sliderDots");
             
-            // Ana sayfa slider noktalarını oluştur
             sliderImages.forEach((img, idx) => {
                 const dot = document.createElement("span");
                 dot.classList.add("dot");
@@ -352,32 +366,40 @@
             
             updateDotsVisuals();
             startInterval();
+            setupTouchEvents(); // Mobilde kaydırma eventlerini aktifleştir
         });
 
         function updateDotsVisuals() {
-            // Sadece ana sayfadaysak ana slider noktalarını güncelle
             const dots = document.querySelectorAll("#sliderDots .dot");
             dots.forEach(dot => dot.classList.remove("active"));
             if(dots[currentImgIndex] && currentModalMode === 'slider') {
                 dots[currentImgIndex].classList.add("active");
             }
             
-            // Modal içindeki noktaları güncelle
             const modalDots = document.querySelectorAll(".modal-dot");
             modalDots.forEach(dot => dot.classList.remove("active"));
             if(modalDots[currentImgIndex]) modalDots[currentImgIndex].classList.add("active");
         }
 
+        // --- YUMUŞAK GEÇİŞ (SMOOTH TRANSITION) UYGULAMALARI ---
+        function transitionImage(imgElement, newSrc, isModal = false) {
+            // Sönme ve küçülme efekti
+            imgElement.style.opacity = '0';
+            imgElement.style.transform = 'scale(0.95)';
+            
+            setTimeout(() => {
+                imgElement.src = newSrc;
+                // Geri gelme ve büyüme efekti
+                imgElement.style.opacity = '1';
+                imgElement.style.transform = 'scale(1)';
+                updateDotsVisuals();
+            }, 250); // 0.25 saniye bekler (CSS transition süresi ile uyumlu)
+        }
+
         function goToSlide(newIndex) {
             currentImgIndex = newIndex;
             const mainImg = document.getElementById("mainGalleryImg");
-            mainImg.style.opacity = 0;
-            
-            setTimeout(() => {
-                mainImg.src = sliderImages[currentImgIndex];
-                mainImg.style.opacity = 1;
-                updateDotsVisuals();
-            }, 300);
+            transitionImage(mainImg, sliderImages[currentImgIndex]);
             resetInterval();
         }
 
@@ -398,7 +420,6 @@
             startInterval();
         }
 
-        // Tıklanan galeriye göre nokta sayısını dinamik olarak oluşturan fonksiyon
         function setupModalDots(imageArray) {
             const modalDotsContainer = document.getElementById("modalDotsContainer");
             modalDotsContainer.innerHTML = ''; 
@@ -421,7 +442,7 @@
         function openModalFromArchive(collectionKey) {
             currentModalMode = 'archive';
             currentActiveArray = archiveCollections[collectionKey];
-            currentImgIndex = 0; // Arşiv galerisi açıldığında ilk resimden başla
+            currentImgIndex = 0; 
             
             setupModalDots(currentActiveArray);
             openModal();
@@ -431,8 +452,13 @@
             const modal = document.getElementById("imageModal");
             const navLeft = document.getElementById("modalPrevBtn");
             const navRight = document.getElementById("modalNextBtn");
+            const modalImg = document.getElementById("modalImg");
             
-            document.getElementById("modalImg").src = currentActiveArray[currentImgIndex];
+            modalImg.src = currentActiveArray[currentImgIndex];
+            // Modalı açarken geçişin temiz olması için:
+            modalImg.style.opacity = '1';
+            modalImg.style.transform = 'scale(1)';
+            
             updateDotsVisuals();
             modal.style.display = "block";
             clearInterval(slideInterval); 
@@ -450,13 +476,7 @@
         function changeModalTo(index) {
             currentImgIndex = index;
             const modalImg = document.getElementById("modalImg");
-            
-            modalImg.style.opacity = 0;
-            setTimeout(() => {
-                modalImg.src = currentActiveArray[currentImgIndex];
-                modalImg.style.opacity = 1;
-                updateDotsVisuals();
-            }, 300);
+            transitionImage(modalImg, currentActiveArray[currentImgIndex], true);
         }
 
         function changeModal(dir) {
@@ -474,6 +494,40 @@
                 currentImgIndex = 0; 
                 resetInterval();
             }
+        }
+
+        // --- MOBİL İÇİN KAYDIRMA (SWIPE) ÖZELLİĞİ ---
+        function setupTouchEvents() {
+            let touchstartX = 0;
+            let touchendX = 0;
+            
+            const sliderArea = document.getElementById('mainSliderContainer');
+            const modalArea = document.getElementById('modalFrameContainer');
+
+            // Ana Sayfa Slider Swipe
+            sliderArea.addEventListener('touchstart', e => {
+                touchstartX = e.changedTouches[0].screenX;
+            }, {passive: true});
+
+            sliderArea.addEventListener('touchend', e => {
+                touchendX = e.changedTouches[0].screenX;
+                if (touchendX < touchstartX - 50) changeSlide(1); // Sola kaydırma (İleri)
+                if (touchendX > touchstartX + 50) changeSlide(-1); // Sağa kaydırma (Geri)
+            }, {passive: true});
+
+            // Modal İçi Swipe
+            modalArea.addEventListener('touchstart', e => {
+                touchstartX = e.changedTouches[0].screenX;
+            }, {passive: true});
+
+            modalArea.addEventListener('touchend', e => {
+                touchendX = e.changedTouches[0].screenX;
+                // Sadece 1'den fazla resim varsa kaydırmaya izin ver
+                if (currentActiveArray.length > 1) {
+                    if (touchendX < touchstartX - 50) changeModal(1);
+                    if (touchendX > touchstartX + 50) changeModal(-1);
+                }
+            }, {passive: true});
         }
     </script>
 </body>
