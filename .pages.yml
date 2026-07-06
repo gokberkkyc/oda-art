@@ -1,0 +1,42 @@
+media:
+  input: ""
+  output: ""
+
+content:
+  - name: galeri
+    label: Galeri ve Arşiv Yönetimi
+    type: file
+    file: data.json
+    fields:
+      - name: slider
+        label: Gösterimdekiler (Ana Slider)
+        type: object
+        list: true
+        fields:
+          - name: image
+            label: Fotoğraf Seç veya Yükle
+            type: image
+      - name: senfoni
+        label: 9. Senfoni Arşivi
+        type: object
+        list: true
+        fields:
+          - name: image
+            label: Fotoğraf Seç veya Yükle
+            type: image
+      - name: esogu
+        label: ESOGÜ Arşivi
+        type: object
+        list: true
+        fields:
+          - name: image
+            label: Fotoğraf Seç veya Yükle
+            type: image
+      - name: poeta
+        label: POETA Arşivi
+        type: object
+        list: true
+        fields:
+          - name: image
+            label: Fotoğraf Seç veya Yükle
+            type: image
