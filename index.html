@@ -76,8 +76,11 @@
         /* Hero Banner */
         .hero-banner { width: 100%; height: 85vh; background-image: linear-gradient(to right, rgba(5,5,5,0) 40%, rgba(5,5,5,1) 95%), url('odaartinterior.jpg'); background-size: cover; background-position: center; position: relative; }
 
+        /* Mobil Yalnızca İçerik Sınıfları (Masaüstünde Gizli) */
+        .mobile-hero-content { display: none; }
+
         /* Çerçeveler */
-        .section-frame { position: relative; padding: 80px 40px; background-color: var(--frame-bg); border: 1px solid #111; border-radius: 4px; box-shadow: inset 0 0 0 8px var(--frame-bg), inset 0 0 0 9px #333, 0 15px 40px rgba(0,0,0,0.8); opacity: 0; transform: translateY(50px); transition: opacity 1s ease-out, transform 1s cubic-bezier(0.2, 0.8, 0.2, 1); }
+        .section-frame { position: relative; padding: 80px 40px; background-color: var(--frame-bg); border: 1px solid #111; border-radius: 4px; box-shadow: inset 0 0 0 8px var(--frame-bg), inset 0 0 0 9px #333, 0 15px 40px rgba(0,0,0,0.8); opacity: 0; transform: translateY(50px); transition: opacity 1s ease-out, transform 1s cubic-bezier(0.2, 0.8, 0.2, 1); scroll-margin-top: 40px; }
         .section-frame.visible { opacity: 1; transform: translateY(0); }
         .section-frame::after { content: ""; position: absolute; bottom: 25px; right: 25px; width: 140px; height: 140px; background-image: url('odamaskot.png'); background-size: contain; background-repeat: no-repeat; filter: brightness(0) invert(1); opacity: 0.35; pointer-events: none; z-index: 0; }
         h2 { font-family: 'Playfair Display', serif; text-transform: uppercase; letter-spacing: 0.4rem; margin-bottom: 50px; font-size: 2.2rem; color: #fff; position: relative; z-index: 2; text-align: center; }
@@ -97,7 +100,7 @@
         .event-box h3 { font-family: 'Playfair Display'; font-size: 1.6rem; margin: 0 0 10px 0; color: #fff; }
         .event-box p { margin: 0; color: var(--accent-color); font-size: 0.9rem; letter-spacing: 0.1rem; }
 
-        /* --- YENİ ARŞİV TASARIMI (YATAY KAYDIRMA) --- */
+        /* --- ARŞİV TASARIMI (YATAY KAYDIRMA) --- */
         #arsiv { margin: 15vh auto 10vh auto; width: 90%; max-width: 80vw; z-index: 12; }
         
         .scroll-hint { text-align: center; color: var(--accent-color); font-size: 0.75rem; letter-spacing: 0.2rem; margin-top: -30px; margin-bottom: 30px; text-transform: uppercase; animation: pulse 2s infinite; opacity: 0.6; pointer-events: none; }
@@ -142,7 +145,7 @@
         input:focus { border-color: var(--accent-color); }
         button { background: var(--accent-color); border: none; padding: 15px 40px; cursor: pointer; text-transform: uppercase; width: 100%; font-weight: bold; letter-spacing: 0.15rem; border-radius: 4px; transition: background 0.3s; }
         button:hover { background: #c2ab91; }
-        footer { padding: 80px 20px; color: #777; background: #050505; text-align: center; border-top: 1px solid #111; }
+        footer { padding: 80px 20px; color: #777; background: #050505; text-align: center; border-top: 1px solid #111; scroll-margin-top: 40px; }
         .address { color: var(--accent-color); font-weight: bold; font-size: 1.1rem; margin-top: 10px; }
         
         /* MOBİL UYUMLULUK */
@@ -171,6 +174,71 @@
             .modal-frame { width: 100%; height: 65vh; border: none; }
             .close-btn { top: 15px; right: 25px; font-size: 35px; }
             .form-container { padding: 30px 20px; width: 100%; box-sizing: border-box; }
+        }
+
+        /* --- SADECE TELEFON (HERO DEĞİŞİKLİKLERİ) --- */
+        @media (max-width: 768px) {
+            nav { display: none; /* Mobilde standart menüyü gizle */ }
+
+            /* YENİ: Mobilde Hero alanı tam ekran olur ve degrade eklenir */
+            .hero-banner { 
+                height: 100vh; 
+                width: 100vw; 
+                background-image: linear-gradient(to top, var(--bg-color) 0%, rgba(5,5,5,0.4) 50%, rgba(5,5,5,0.8) 100%), url('odaartinterior.jpg');
+                display: flex;
+                flex-direction: column;
+                justify-content: flex-end; /* İçeriği alta yaslar */
+                align-items: center;
+                padding-bottom: 80px;
+                position: relative;
+            } 
+
+            /* YENİ: Mobilde ortaya çıkan içerik alanı */
+            .mobile-hero-content {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                width: 100%;
+                z-index: 10;
+                animation: slideUpFade 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+            }
+
+            @keyframes slideUpFade {
+                0% { transform: translateY(30px); opacity: 0; }
+                100% { transform: translateY(0); opacity: 1; }
+            }
+
+            .mobile-logo {
+                width: 220px;
+                filter: invert(1); /* Siyah arka planda beyaz görünmesi için */
+                margin-bottom: 40px;
+            }
+
+            .mobile-action-btn {
+                width: 80%;
+                max-width: 300px;
+                background: var(--accent-color);
+                color: #fff;
+                padding: 15px 20px;
+                margin-bottom: 15px;
+                border-radius: 50px;
+                text-decoration: none;
+                font-weight: bold;
+                font-family: 'Montserrat', sans-serif;
+                font-size: 1rem;
+                text-align: center;
+                text-transform: uppercase;
+                letter-spacing: 0.1rem;
+                box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+            }
+
+            .mobile-action-btn.outline {
+                background: transparent;
+                border: 2px solid var(--accent-color);
+                color: var(--accent-color);
+            }
+
+            #gosterimdekiler { margin-top: 40px; } /* Mobilde margin düzeltmesi */
         }
 
         @media (max-width: 400px) {
@@ -209,7 +277,13 @@
         </div>
     </nav>
 
-    <div class="hero-banner"></div>
+    <div class="hero-banner">
+        <div class="mobile-hero-content">
+            <img src="odalogo.png" class="mobile-logo" alt="ODA Logo">
+            <a href="#gosterimdekiler" class="mobile-action-btn">Gösterimdekiler'e Git ↓</a>
+            <a href="#iletisim" class="mobile-action-btn outline">Bize Ulaşın ↓</a>
+        </div>
+    </div>
 
     <section id="gosterimdekiler" class="section-frame">
         <h2>Gösterimdekiler</h2>
@@ -537,7 +611,7 @@
             }, {passive: true});
         }
 
-        // --- YENİ: ARŞİV MASAÜSTÜ MOUSE SÜRÜKLEME (DRAG) FONKSİYONU ---
+        // --- ARŞİV MASAÜSTÜ MOUSE SÜRÜKLEME (DRAG) FONKSİYONU ---
         const arsivSlider = document.getElementById('arsivContainer');
         let isDown = false;
         let isDragging = false;
@@ -566,16 +640,14 @@
             if (!isDown) return;
             e.preventDefault();
             const x = e.pageX - arsivSlider.offsetLeft;
-            const walk = (x - startX) * 2; // Kaydırma hızını ayarlayan çarpan
+            const walk = (x - startX) * 2; 
             
-            // Eğer fare 5 pikselden fazla hareket ettiyse sürükleme sayılır (tıklamayı engellemek için)
             if (Math.abs(walk) > 5) {
                 isDragging = true;
             }
             arsivSlider.scrollLeft = scrollLeft - walk;
         });
 
-        // Sürükleme sırasında karta yanlışlıkla tıklanmasını engeller
         arsivSlider.addEventListener('click', (e) => {
             if (isDragging) {
                 e.preventDefault();
